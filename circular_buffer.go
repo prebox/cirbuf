@@ -32,14 +32,15 @@ func (q *CircularBuffer[T]) Enqueue(value T) error {
 }
 
 // Dequeues a value from the front of the queue.
-func (q *CircularBuffer[T]) Dequeue() error {
+func (q *CircularBuffer[T]) Dequeue() (*T, error) {
 	if q.IsEmpty() {
-		return ErrorIsEmpty
+		return nil, ErrorIsEmpty
 	} else {
 		q.size--
+		value := q.data[q.head]
 		q.data[q.head] = *new(T)
 		q.head = (q.head + 1) % len(q.data)
-		return nil
+		return &value, nil
 	}
 }
 
