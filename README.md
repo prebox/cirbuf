@@ -32,7 +32,8 @@ Here is a list of methods available in the circular buffer:
 * `PeekBack() (*T, error)` - Returns the last element in the buffer without modifying it.
 * `PeekFront() (*T, error)` - Returns the first element in the buffer without modifying it.
 ## Code Example
-Here is an example of how you can use the cirbuf package to create a circular buffer and perform various operations on it:
+Here is an example of how you can use the cirbuf package to create a circular buffer and perform various operations on it:  
+`NOTE: The methods return pointers to values`
 ```go
 package main
 
@@ -64,4 +65,4 @@ func main() {
 	// Output: false
 }
 ```
-In this example, we initialize a circular buffer with type int and a capacity of 10. Then we enqueue the integers `1, 2, 3` and perform the operations `PeekFront` and `PeekBack` to verify that the order is correct. We then use `Dequeue` to dequeue the value `1` and verify that it has been successfully removed using the `Get` method. Additionally `IsEmpty` and `IsFull` both return false since the buffer is neither full nor empty.
+In this example, we initialize a circular buffer with type int and a capacity of 10. Then we enqueue the int `1, 2, 3` and perform the operations `PeekFront` and `PeekBack` to verify that the order is correct. We then use `Dequeue` to dequeue the value `1` and verify that it has been successfully removed using the `Get` method. Additionally `IsEmpty` and `IsFull` both return false since the buffer is neither full nor empty.
