@@ -19,6 +19,11 @@ func New[T any](length int) *CircularBuffer[T] {
 	return &CircularBuffer[T]{data: make([]T, length)}
 }
 
+// Returns the number of items in the queue.
+func (q *CircularBuffer[T]) Count() int {
+	return q.count
+}
+
 // Enqueues an item to the back of the queue.
 func (q *CircularBuffer[T]) Enqueue(item T) error {
 	if q.IsFull() {
