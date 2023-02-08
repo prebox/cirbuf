@@ -1,4 +1,7 @@
 # Circular Buffer Package for Go
+[![Go Report Card](https://goreportcard.com/badge/github.com/prebox/cirbuf)](https://goreportcard.com/report/github.com/prebox/cirbuf)
+[![Go Reference](https://pkg.go.dev/badge/github.com/prebox/cirbuf.svg)](https://pkg.go.dev/github.com/prebox/cirbuf)
+
 The cirbuf package is a generic implementation of a circular buffer in Go.
 ## Features
 * Supports any single data type through the use of generics.
