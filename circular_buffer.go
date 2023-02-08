@@ -71,8 +71,7 @@ func (q *CircularBuffer[T]) PeekBack() (*T, error) {
 	if q.IsEmpty() {
 		return nil, ErrorIsEmpty
 	}
-	index := (q.head + q.count - 1) % len(q.data)
-	return &q.data[index], nil
+	return &q.data[(q.tail-1)%len(q.data)], nil
 }
 
 // Returns true if the queue is empty.
