@@ -1,4 +1,4 @@
-# cirbuf - Circular Buffer Package for Go
+# Circular Buffer Package for Go
 The cirbuf package is a generic implementation of a circular buffer in Go.
 ## Features
 * Supports any single data type through the use of generics.
@@ -14,7 +14,7 @@ Once you have the package installed, you can start using it by importing it in y
 import "github.com/prebox/cirbuf"
 ```
 ## Initializing a Circular Buffer
-To create a new circular buffer, you can use the New function, followed by the type of data you want to store in square brackets. The function argument is the circular buffer's capacity.
+To create a new circular buffer, you can use the `New` function, followed by the type of data you want to store in square brackets. The function argument is the circular buffer's capacity.
 ```go
 buffer := cirbuf.New[int](10)
 ```
@@ -28,6 +28,7 @@ Here is a list of methods available for the circular buffer:
 * `PeekBack() (*T, error)` - Returns the item at the back of the queue.
 * `IsEmpty() bool` - Returns true if the queue is empty.
 * `IsFull() bool` - Returns true if the queue is full.
+* `Reset()` - Resets the circular buffer.
 ## Code Example
 Here is an example of how you can use the cirbuf package to create a circular buffer and perform various operations on it:  
 `NOTE: Methods return pointers to queued items.`
@@ -63,5 +64,10 @@ func main() {
 
 	fmt.Println(buffer.Count())
 	// Output: 2
+
+	buffer.Reset()
+	
+	fmt.Println(buffer.Count())
+	// Output: 0
 }
 ```

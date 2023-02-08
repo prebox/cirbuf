@@ -42,10 +42,9 @@ func (q *CircularBuffer[T]) Dequeue() (*T, error) {
 		return nil, ErrorIsEmpty
 	}
 	q.count--
-	item := q.data[q.head]
-	q.data[q.head] = *new(T)
+	item := &q.data[q.head]
 	q.head = (q.head + 1) % len(q.data)
-	return &item, nil
+	return item, nil
 }
 
 // Returns the item at a specified index in the queue.
@@ -83,4 +82,9 @@ func (q *CircularBuffer[T]) IsEmpty() bool {
 // Returns true if the queue is full.
 func (q *CircularBuffer[T]) IsFull() bool {
 	return q.count == len(q.data)
+}
+
+// Resets the circular buffer.
+func (q *CircularBuffer[T]) Reset() {
+	q.head, q.tail, q.count = 0, 0, 0
 }
