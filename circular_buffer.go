@@ -2,6 +2,7 @@ package cirbuf
 
 import "errors"
 
+// Represents an error message.
 var (
 	ErrorIsFull      = errors.New("queue is full")
 	ErrorIsEmpty     = errors.New("queue is empty")
