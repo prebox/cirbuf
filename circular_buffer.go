@@ -1,3 +1,4 @@
+// Package cirbuf provides a generic implementation of a circular buffer.
 package cirbuf
 
 import "errors"
