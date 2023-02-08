@@ -8,7 +8,7 @@ var (
 	ErrorOutOfBounds = errors.New("index out of bounds")
 )
 
-// Represents a circular buffer/queue.
+// Represents a circular buffer.
 type CircularBuffer[T any] struct {
 	data              []T
 	head, tail, count int
