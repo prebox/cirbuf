@@ -30,9 +30,9 @@ func (q *CircularBuffer[T]) Enqueue(item T) error {
 	if q.IsFull() {
 		return ErrorIsFull
 	}
-	q.count++
 	q.data[q.tail] = item
 	q.tail = (q.tail + 1) % len(q.data)
+	q.count++
 	return nil
 }
 
@@ -41,9 +41,9 @@ func (q *CircularBuffer[T]) Dequeue() (*T, error) {
 	if q.IsEmpty() {
 		return nil, ErrorIsEmpty
 	}
-	q.count--
 	item := &q.data[q.head]
 	q.head = (q.head + 1) % len(q.data)
+	q.count--
 	return item, nil
 }
 
