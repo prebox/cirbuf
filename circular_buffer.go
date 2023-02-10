@@ -89,3 +89,8 @@ func (q *CircularBuffer[T]) IsFull() bool {
 func (q *CircularBuffer[T]) Reset() {
 	q.head, q.tail, q.count = 0, 0, 0
 }
+
+// Returns the capacity of the circular buffer.
+func (q *CircularBuffer[T]) Capacity() int {
+	return len(q.data)
+}
