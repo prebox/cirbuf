@@ -32,6 +32,7 @@ Here is a list of methods available for the circular buffer:
 * `IsEmpty() bool` - Returns true if the queue is empty.
 * `IsFull() bool` - Returns true if the queue is full.
 * `Reset()` - Resets the circular buffer.
+* `Capacity() int` - Returns the capacity of the circular buffer.
 ## Code Example
 Here is an example of how you can use the cirbuf package to create a circular buffer and perform various operations on it:  
 `NOTE: Methods return pointers to queued items.`
@@ -72,5 +73,8 @@ func main() {
 	
 	fmt.Println(buffer.Count())
 	// Output: 0
+
+	fmt.Println(buffer.Capacity())
+	// Output: 10
 }
 ```
