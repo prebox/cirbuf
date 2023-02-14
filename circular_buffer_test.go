@@ -87,3 +87,42 @@ func TestDequeue(t *testing.T) {
 		})
 	}
 }
+
+func TestGet(t *testing.T) {
+	q := New[int](3)
+
+	t.Run("get empty", func(t *testing.T) {
+		if _, err := q.Get(0); err != ErrorIsEmpty {
+			t.Errorf("Expected %v, but got: %v", ErrorIsEmpty, err)
+		}
+	})
+
+	// Manually set the state of the buffer.
+	q.data = []int{1, 2, 3}
+	q.tail = 0
+	q.count = 3
+
+	testCases := []struct {
+		name     string
+		index    int
+		expected int
+		err      error
+	}{
+		{"get first", 0, 1, nil},
+		{"get second", 1, 2, nil},
+		{"get third", 2, 3, nil},
+		{"get out of bounds", 3, 0, ErrorOutOfBounds},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			item, err := q.Get(tc.index)
+			if item != tc.expected {
+				t.Errorf("Expected %v, but got: %v", tc.expected, item)
+			}
+			if err != tc.err {
+				t.Errorf("Expected %v, but got: %v", tc.err, err)
+			}
+		})
+	}
+}
