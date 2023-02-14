@@ -3,6 +3,8 @@ package cirbuf
 import "testing"
 
 func TestEnqueue(t *testing.T) {
+	q := New[int](3)
+
 	testCases := []struct {
 		name     string
 		item     int
@@ -18,11 +20,14 @@ func TestEnqueue(t *testing.T) {
 		{"enqueue full", 4, []int{1, 2, 3}, 3, 0, 0, ErrorIsFull},
 	}
 
-	q := New[int](3)
-
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			err := q.Enqueue(tc.item)
+			for j := range tc.expected {
+				if q.data[j] != tc.expected[j] {
+					t.Errorf("Expected %v, but got: %v", tc.expected, q.data)
+				}
+			}
 			if q.count != tc.count {
 				t.Errorf("Expected %d, but got: %d", tc.count, q.count)
 			}
@@ -32,11 +37,6 @@ func TestEnqueue(t *testing.T) {
 			if q.tail != tc.tail {
 				t.Errorf("Expected %d, but got: %d", tc.tail, q.tail)
 			}
-			for j := range tc.expected {
-				if q.data[j] != tc.expected[j] {
-					t.Errorf("Expected %v, but got: %v", tc.expected, q.data)
-				}
-			}
 			if err != tc.err {
 				t.Errorf("Expected %v, but got: %v", tc.err, err)
 			}
@@ -45,6 +45,13 @@ func TestEnqueue(t *testing.T) {
 }
 
 func TestDequeue(t *testing.T) {
+	q := New[int](3)
+
+	// Manually set the state of the buffer.
+	q.data = []int{1, 2, 3}
+	q.tail = 0
+	q.count = 3
+
 	testCases := []struct {
 		name     string
 		expected int
@@ -58,13 +65,6 @@ func TestDequeue(t *testing.T) {
 		{"dequeue third", 3, 0, 0, 0, nil},
 		{"dequeue empty", 0, 0, 0, 0, ErrorIsEmpty},
 	}
-
-	q := New[int](3)
-
-	// Manually set the state of the buffer.
-	q.data = []int{1, 2, 3}
-	q.tail = 0
-	q.count = 3
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
