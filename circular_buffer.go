@@ -1,9 +1,8 @@
-// Package cirbuf provides a generic implementation of a circular buffer.
+// Package cirbuf provides a generic static circular buffer.
 package cirbuf
 
 import "errors"
 
-// Represents an error message.
 var (
 	ErrorIsFull      = errors.New("queue is full")
 	ErrorIsEmpty     = errors.New("queue is empty")
@@ -38,41 +37,41 @@ func (q *CircularBuffer[T]) Enqueue(item T) error {
 }
 
 // Dequeues an item from the front of the queue.
-func (q *CircularBuffer[T]) Dequeue() (*T, error) {
+func (q *CircularBuffer[T]) Dequeue() (T, error) {
 	if q.IsEmpty() {
-		return nil, ErrorIsEmpty
+		return *new(T), ErrorIsEmpty
 	}
-	item := &q.data[q.head]
+	item := q.data[q.head]
 	q.head = (q.head + 1) % len(q.data)
 	q.count--
 	return item, nil
 }
 
 // Returns the item at a specified index in the queue.
-func (q *CircularBuffer[T]) Get(index int) (*T, error) {
+func (q *CircularBuffer[T]) Get(index int) (T, error) {
 	if q.IsEmpty() {
-		return nil, ErrorIsEmpty
+		return *new(T), ErrorIsEmpty
 	} else if index < 0 || index >= q.count {
-		return nil, ErrorOutOfBounds
+		return *new(T), ErrorOutOfBounds
 	}
 	internalIndex := (q.head + index) % len(q.data)
-	return &q.data[internalIndex], nil
+	return q.data[internalIndex], nil
 }
 
 // Returns the item at the front of the queue.
-func (q *CircularBuffer[T]) PeekFront() (*T, error) {
+func (q *CircularBuffer[T]) PeekFront() (T, error) {
 	if q.IsEmpty() {
-		return nil, ErrorIsEmpty
+		return *new(T), ErrorIsEmpty
 	}
-	return &q.data[q.head], nil
+	return q.data[q.head], nil
 }
 
 // Returns the item at the back of the queue.
-func (q *CircularBuffer[T]) PeekBack() (*T, error) {
+func (q *CircularBuffer[T]) PeekBack() (T, error) {
 	if q.IsEmpty() {
-		return nil, ErrorIsEmpty
+		return *new(T), ErrorIsEmpty
 	}
-	return &q.data[(q.tail-1)%len(q.data)], nil
+	return q.data[(q.tail-1)%len(q.data)], nil
 }
 
 // Returns true if the queue is empty.
