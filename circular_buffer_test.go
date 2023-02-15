@@ -153,3 +153,28 @@ func TestPeekBack(t *testing.T) {
 		})
 	}
 }
+
+func TestReset(t *testing.T) {
+	for _, test := range testdata.TestCasesReset {
+		q := &CircularBuffer[int]{
+			data:  test.Data,
+			head:  test.Head,
+			tail:  test.Tail,
+			count: test.Count,
+		}
+
+		// Run test case.
+		t.Run(test.Name, func(t *testing.T) {
+			q.Reset()
+			if q.head != test.ExpectHead {
+				t.Errorf("Expected %v, but got: %v", test.ExpectHead, q.head)
+			}
+			if q.tail != test.ExpectTail {
+				t.Errorf("Expected %v, but got: %v", test.ExpectTail, q.tail)
+			}
+			if q.count != test.ExpectCount {
+				t.Errorf("Expected %v, but got: %v", test.ExpectCount, q.count)
+			}
+		})
+	}
+}
