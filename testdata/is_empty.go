@@ -1,7 +1,7 @@
-package testcases
+package testdata
 
 // Test cases for IsEmpty.
-var IsEmpty = []struct {
+var TestCasesIsEmpty = []struct {
 	Name   string
 	Data   []int
 	Head   int

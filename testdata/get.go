@@ -1,9 +1,9 @@
-package testcases
+package testdata
 
 import "github.com/prebox/cirbuf/errors"
 
 // Test cases for Get.
-var Get = []struct {
+var TestCasesGet = []struct {
 	Name   string
 	Data   []int
 	Head   int
