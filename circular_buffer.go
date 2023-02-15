@@ -1,7 +1,9 @@
 // Package cirbuf provides a generic static circular buffer.
 package cirbuf
 
-import "github.com/prebox/cirbuf/errors"
+import (
+	"github.com/prebox/cirbuf/errors"
+)
 
 // Represents a circular buffer.
 type CircularBuffer[T any] struct {
@@ -11,7 +13,12 @@ type CircularBuffer[T any] struct {
 
 // Creates a new queue with the specified length.
 func New[T any](length int) *CircularBuffer[T] {
-	return &CircularBuffer[T]{data: make([]T, length)}
+	return &CircularBuffer[T]{
+		data:  make([]T, length),
+		head:  0,
+		tail:  -1,
+		count: 0,
+	}
 }
 
 // Returns the number of items in the queue.
@@ -24,8 +31,8 @@ func (q *CircularBuffer[T]) Enqueue(item T) error {
 	if q.IsFull() {
 		return errors.ErrorIsFull
 	}
-	q.data[q.tail] = item
 	q.tail = (q.tail + 1) % len(q.data)
+	q.data[q.tail] = item
 	q.count++
 	return nil
 }
@@ -65,7 +72,7 @@ func (q *CircularBuffer[T]) PeekBack() (T, error) {
 	if q.IsEmpty() {
 		return *new(T), errors.ErrorIsEmpty
 	}
-	return q.data[(q.tail-1)%len(q.data)], nil
+	return q.data[q.tail], nil
 }
 
 // Returns true if the queue is empty.
@@ -80,7 +87,7 @@ func (q *CircularBuffer[T]) IsFull() bool {
 
 // Resets the circular buffer.
 func (q *CircularBuffer[T]) Reset() {
-	q.head, q.tail, q.count = 0, 0, 0
+	q.head, q.tail, q.count = 0, -1, 0
 }
 
 // Returns the capacity of the circular buffer.
