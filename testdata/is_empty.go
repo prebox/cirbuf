@@ -9,7 +9,7 @@ var TestCasesIsEmpty = []struct {
 	Count  int
 	Expect bool
 }{
-	{Name: "empty buffer", Data: []int{0, 0, 0}, Head: 0, Tail: -1, Count: 0, Expect: true},
-	{Name: "partially full buffer", Data: []int{1, 0, 0}, Head: 0, Tail: 0, Count: 1, Expect: false},
-	{Name: "full buffer", Data: []int{1, 2, 3}, Head: 0, Tail: 2, Count: 3, Expect: false},
+	{Name: "Empty buffer", Data: []int{0, 0, 0}, Head: 0, Tail: -1, Count: 0, Expect: true},
+	{Name: "Partially full buffer", Data: []int{1, 0, 0}, Head: 0, Tail: 0, Count: 1, Expect: false},
+	{Name: "Full buffer", Data: []int{1, 2, 3}, Head: 0, Tail: 2, Count: 3, Expect: false},
 }
