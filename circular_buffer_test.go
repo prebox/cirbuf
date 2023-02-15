@@ -1,204 +1,110 @@
 package cirbuf
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/prebox/cirbuf/testdata"
+)
 
 func TestIsFull(t *testing.T) {
-	q := New[int](3)
-
-	t.Run("empty buffer", func(t *testing.T) {
-		// Check if IsFull returns false for an empty buffer.
-		if full := q.IsFull(); full != false {
-			t.Errorf("Expected false, but got: %v", full)
+	for _, test := range testdata.TestCasesIsFull {
+		q := &CircularBuffer[int]{
+			data:  test.Data,
+			head:  test.Head,
+			tail:  test.Tail,
+			count: test.Count,
 		}
-	})
 
-	t.Run("partially full buffer", func(t *testing.T) {
-		// Manually set the state of the buffer to partially full.
-		q.data = []int{1, 2, 0}
-		q.head = 0
-		q.tail = 2
-		q.count = 2
-		// Check if IsFull returns false for a partially full buffer.
-		if full := q.IsFull(); full != false {
-			t.Errorf("Expected false, but got: %v", full)
-		}
-	})
-
-	t.Run("full buffer", func(t *testing.T) {
-		// Manually set the state of the buffer to full.
-		q.data = []int{1, 2, 3}
-		q.head = 0
-		q.tail = 0
-		q.count = 3
-		// Check if IsFull returns true for a full buffer.
-		if full := q.IsFull(); full != true {
-			t.Errorf("Expected true, but got: %v", full)
-		}
-	})
+		// Run test case.
+		t.Run(test.Name, func(t *testing.T) {
+			if got := q.IsFull(); got != test.Expect {
+				t.Errorf("Expected %v, but got: %v", test.Expect, got)
+			}
+		})
+	}
 }
 
 func TestIsEmpty(t *testing.T) {
-	q := New[int](3)
-
-	t.Run("empty buffer", func(t *testing.T) {
-		// Check if IsEmpty returns true for an empty buffer.
-		if empty := q.IsEmpty(); empty != true {
-			t.Errorf("Expected true, but got: %v", empty)
+	for _, test := range testdata.TestCasesIsEmpty {
+		q := &CircularBuffer[int]{
+			data:  test.Data,
+			head:  test.Head,
+			tail:  test.Tail,
+			count: test.Count,
 		}
-	})
 
-	t.Run("partially full buffer", func(t *testing.T) {
-		// Manually set the state of the buffer to partially full.
-		q.data = []int{1, 0, 0}
-		q.head = 0
-		q.tail = 1
-		q.count = 1
-		// Check if IsEmpty returns false for a partially full buffer.
-		if empty := q.IsEmpty(); empty != false {
-			t.Errorf("Expected false, but got: %v", empty)
-		}
-	})
-
-	t.Run("full buffer", func(t *testing.T) {
-		// Manually set the state of the buffer to full.
-		q.data = []int{1, 2, 3}
-		q.head = 0
-		q.tail = 0
-		q.count = 3
-		// Check if IsEmpty returns false for a full buffer.
-		if empty := q.IsEmpty(); empty != false {
-			t.Errorf("Expected false, but got: %v", empty)
-		}
-	})
+		// Run test case.
+		t.Run(test.Name, func(t *testing.T) {
+			if got := q.IsEmpty(); got != test.Expect {
+				t.Errorf("Expected %v, but got: %v", test.Expect, got)
+			}
+		})
+	}
 }
 
 func TestEnqueue(t *testing.T) {
-	q := New[int](3)
+	for _, test := range testdata.TestCasesEnqueue {
+		q := &CircularBuffer[int]{
+			data:  test.Data,
+			head:  test.Head,
+			tail:  test.Tail,
+			count: test.Count,
+		}
 
-	// Setup test cases.
-	testCases := []struct {
-		name     string
-		item     int
-		expected []int
-		count    int
-		head     int
-		tail     int
-		err      error
-	}{
-		{"enqueue first", 1, []int{1, 0, 0}, 1, 0, 1, nil},
-		{"enqueue second", 2, []int{1, 2, 0}, 2, 0, 2, nil},
-		{"enqueue third", 3, []int{1, 2, 3}, 3, 0, 0, nil},
-		{"enqueue full", 4, []int{1, 2, 3}, 3, 0, 0, ErrorIsFull},
-	}
-
-	// Run test cases.
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			err := q.Enqueue(tc.item)
-			for j := range tc.expected {
-				if q.data[j] != tc.expected[j] {
-					t.Errorf("Expected %v, but got: %v", tc.expected, q.data)
+		// Run test case.
+		t.Run(test.Name, func(t *testing.T) {
+			err := q.Enqueue(test.Item)
+			if err != test.Err {
+				t.Errorf("Expected %v, but got: %v", test.Err, err)
+			}
+			for i := range q.data {
+				if q.data[i] != test.ExpectData[i] {
+					t.Errorf("Expected %v, but got: %v", test.ExpectData, q.data)
 				}
-			}
-			if q.count != tc.count {
-				t.Errorf("Expected %d, but got: %d", tc.count, q.count)
-			}
-			if q.head != tc.head {
-				t.Errorf("Expected %d, but got: %d", tc.head, q.head)
-			}
-			if q.tail != tc.tail {
-				t.Errorf("Expected %d, but got: %d", tc.tail, q.tail)
-			}
-			if err != tc.err {
-				t.Errorf("Expected %v, but got: %v", tc.err, err)
 			}
 		})
 	}
 }
 
 func TestDequeue(t *testing.T) {
-	q := New[int](3)
+	for _, test := range testdata.TestCasesDequeue {
+		q := &CircularBuffer[int]{
+			data:  test.Data,
+			head:  test.Head,
+			tail:  test.Tail,
+			count: test.Count,
+		}
 
-	// Manually set the state of the buffer.
-	q.data = []int{1, 2, 3}
-	q.tail = 0
-	q.count = 3
-
-	// Setup test cases.
-	testCases := []struct {
-		name     string
-		expected int
-		count    int
-		head     int
-		tail     int
-		err      error
-	}{
-		{"dequeue first", 1, 2, 1, 0, nil},
-		{"dequeue second", 2, 1, 2, 0, nil},
-		{"dequeue third", 3, 0, 0, 0, nil},
-		{"dequeue empty", 0, 0, 0, 0, ErrorIsEmpty},
-	}
-
-	// Run test cases.
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
+		// Run test case.
+		t.Run(test.Name, func(t *testing.T) {
 			item, err := q.Dequeue()
-			if item != tc.expected {
-				t.Errorf("Expected %v, but got: %v", tc.expected, item)
+			if err != test.Err {
+				t.Errorf("Expected %v, but got: %v", test.Err, err)
 			}
-			if q.count != tc.count {
-				t.Errorf("Expected %v, but got: %d", tc.count, q.count)
-			}
-			if q.head != tc.head {
-				t.Errorf("Expected %v, but got: %d", tc.head, q.head)
-			}
-			if q.tail != tc.tail {
-				t.Errorf("Expected %v, but got: %d", tc.tail, q.tail)
-			}
-			if err != tc.err {
-				t.Errorf("Expected %v, but got: %v", tc.err, err)
+			if item != test.ExpectOutput {
+				t.Errorf("Expected %v, but got: %v", test.ExpectOutput, item)
 			}
 		})
 	}
 }
 
 func TestGet(t *testing.T) {
-	q := New[int](3)
-
-	// Run test on empty queue.
-	t.Run("get empty", func(t *testing.T) {
-		if _, err := q.Get(0); err != ErrorIsEmpty {
-			t.Errorf("Expected %v, but got: %v", ErrorIsEmpty, err)
+	for _, test := range testdata.TestCasesGet {
+		q := &CircularBuffer[int]{
+			data:  test.Data,
+			head:  test.Head,
+			tail:  test.Tail,
+			count: test.Count,
 		}
-	})
 
-	// Manually set the state of the buffer.
-	q.data = []int{1, 2, 3}
-	q.tail = 0
-	q.count = 3
-
-	// Setup test cases.
-	testCases := []struct {
-		name     string
-		index    int
-		expected int
-		err      error
-	}{
-		{"get first", 0, 1, nil},
-		{"get second", 1, 2, nil},
-		{"get third", 2, 3, nil},
-		{"get out of bounds", 3, 0, ErrorOutOfBounds},
-	}
-
-	// Run test cases.
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			item, err := q.Get(tc.index)
-			if item != tc.expected {
-				t.Errorf("Expected %v, but got: %v", tc.expected, item)
+		// Run test case.
+		t.Run(test.Name, func(t *testing.T) {
+			item, err := q.Get(test.Index)
+			if err != test.Err {
+				t.Errorf("Expected %v, but got: %v", test.Err, err)
 			}
-			if err != tc.err {
-				t.Errorf("Expected %v, but got: %v", tc.err, err)
+			if item != test.Expect {
+				t.Errorf("Expected %v, but got: %v", test.Expect, item)
 			}
 		})
 	}
