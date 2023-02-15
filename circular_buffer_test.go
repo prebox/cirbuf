@@ -109,3 +109,25 @@ func TestGet(t *testing.T) {
 		})
 	}
 }
+
+func TestPeekFront(t *testing.T) {
+	for _, test := range testdata.TestCasesPeekFront {
+		q := &CircularBuffer[int]{
+			data:  test.Data,
+			head:  test.Head,
+			tail:  test.Tail,
+			count: test.Count,
+		}
+
+		// Run test case.
+		t.Run(test.Name, func(t *testing.T) {
+			item, err := q.PeekFront()
+			if err != test.Err {
+				t.Errorf("Expected %v, but got: %v", test.Err, err)
+			}
+			if item != test.Expect {
+				t.Errorf("Expected %v, but got: %v", test.Expect, item)
+			}
+		})
+	}
+}
