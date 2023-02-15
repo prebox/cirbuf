@@ -1,9 +1,7 @@
 // Package cirbuf provides a generic static circular buffer.
 package cirbuf
 
-import (
-	"github.com/prebox/cirbuf/errors"
-)
+import "github.com/prebox/cirbuf/errors"
 
 // Represents a circular buffer.
 type CircularBuffer[T any] struct {
@@ -11,22 +9,22 @@ type CircularBuffer[T any] struct {
 	head, tail, count int
 }
 
-// Creates a new queue with the specified length.
-func New[T any](length int) *CircularBuffer[T] {
+// Creates a new static size circular buffer.
+func New[T any](size int) *CircularBuffer[T] {
 	return &CircularBuffer[T]{
-		data:  make([]T, length),
+		data:  make([]T, size),
 		head:  0,
 		tail:  -1,
 		count: 0,
 	}
 }
 
-// Returns the number of items in the queue.
+// Returns the number of items in the circular buffer.
 func (q *CircularBuffer[T]) Count() int {
 	return q.count
 }
 
-// Enqueues an item to the back of the queue.
+// Enqueues an item to the back of the circular buffer.
 func (q *CircularBuffer[T]) Enqueue(item T) error {
 	if q.IsFull() {
 		return errors.ErrorIsFull
@@ -37,7 +35,7 @@ func (q *CircularBuffer[T]) Enqueue(item T) error {
 	return nil
 }
 
-// Dequeues an item from the front of the queue.
+// Dequeues an item from the front of the circular buffer.
 func (q *CircularBuffer[T]) Dequeue() (T, error) {
 	if q.IsEmpty() {
 		return *new(T), errors.ErrorIsEmpty
@@ -48,7 +46,7 @@ func (q *CircularBuffer[T]) Dequeue() (T, error) {
 	return item, nil
 }
 
-// Returns the item at a specified index in the queue.
+// Returns the item at the index in the circular buffer.
 func (q *CircularBuffer[T]) Get(index int) (T, error) {
 	if q.IsEmpty() {
 		return *new(T), errors.ErrorIsEmpty
@@ -59,7 +57,7 @@ func (q *CircularBuffer[T]) Get(index int) (T, error) {
 	return q.data[internalIndex], nil
 }
 
-// Returns the item at the front of the queue.
+// Returns the item at the front of the circular buffer.
 func (q *CircularBuffer[T]) PeekFront() (T, error) {
 	if q.IsEmpty() {
 		return *new(T), errors.ErrorIsEmpty
@@ -67,7 +65,7 @@ func (q *CircularBuffer[T]) PeekFront() (T, error) {
 	return q.data[q.head], nil
 }
 
-// Returns the item at the back of the queue.
+// Returns the item at the back of the circular buffer.
 func (q *CircularBuffer[T]) PeekBack() (T, error) {
 	if q.IsEmpty() {
 		return *new(T), errors.ErrorIsEmpty
@@ -75,12 +73,12 @@ func (q *CircularBuffer[T]) PeekBack() (T, error) {
 	return q.data[q.tail], nil
 }
 
-// Returns true if the queue is empty.
+// Returns true if the circular buffer is empty.
 func (q *CircularBuffer[T]) IsEmpty() bool {
 	return q.count == 0
 }
 
-// Returns true if the queue is full.
+// Returns true if the circular buffer is full.
 func (q *CircularBuffer[T]) IsFull() bool {
 	return q.count == len(q.data)
 }
