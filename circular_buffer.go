@@ -1,13 +1,7 @@
 // Package cirbuf provides a generic static circular buffer.
 package cirbuf
 
-import "errors"
-
-var (
-	ErrorIsFull      = errors.New("queue is full")
-	ErrorIsEmpty     = errors.New("queue is empty")
-	ErrorOutOfBounds = errors.New("index out of bounds")
-)
+import "github.com/prebox/cirbuf/errors"
 
 // Represents a circular buffer.
 type CircularBuffer[T any] struct {
@@ -28,7 +22,7 @@ func (q *CircularBuffer[T]) Count() int {
 // Enqueues an item to the back of the queue.
 func (q *CircularBuffer[T]) Enqueue(item T) error {
 	if q.IsFull() {
-		return ErrorIsFull
+		return errors.ErrorIsFull
 	}
 	q.data[q.tail] = item
 	q.tail = (q.tail + 1) % len(q.data)
@@ -39,7 +33,7 @@ func (q *CircularBuffer[T]) Enqueue(item T) error {
 // Dequeues an item from the front of the queue.
 func (q *CircularBuffer[T]) Dequeue() (T, error) {
 	if q.IsEmpty() {
-		return *new(T), ErrorIsEmpty
+		return *new(T), errors.ErrorIsEmpty
 	}
 	item := q.data[q.head]
 	q.head = (q.head + 1) % len(q.data)
@@ -50,9 +44,9 @@ func (q *CircularBuffer[T]) Dequeue() (T, error) {
 // Returns the item at a specified index in the queue.
 func (q *CircularBuffer[T]) Get(index int) (T, error) {
 	if q.IsEmpty() {
-		return *new(T), ErrorIsEmpty
+		return *new(T), errors.ErrorIsEmpty
 	} else if index < 0 || index >= q.count {
-		return *new(T), ErrorOutOfBounds
+		return *new(T), errors.ErrorOutOfBounds
 	}
 	internalIndex := (q.head + index) % len(q.data)
 	return q.data[internalIndex], nil
@@ -61,7 +55,7 @@ func (q *CircularBuffer[T]) Get(index int) (T, error) {
 // Returns the item at the front of the queue.
 func (q *CircularBuffer[T]) PeekFront() (T, error) {
 	if q.IsEmpty() {
-		return *new(T), ErrorIsEmpty
+		return *new(T), errors.ErrorIsEmpty
 	}
 	return q.data[q.head], nil
 }
@@ -69,7 +63,7 @@ func (q *CircularBuffer[T]) PeekFront() (T, error) {
 // Returns the item at the back of the queue.
 func (q *CircularBuffer[T]) PeekBack() (T, error) {
 	if q.IsEmpty() {
-		return *new(T), ErrorIsEmpty
+		return *new(T), errors.ErrorIsEmpty
 	}
 	return q.data[(q.tail-1)%len(q.data)], nil
 }
