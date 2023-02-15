@@ -1,5 +1,6 @@
 package testdata
 
+// Test cases for Reset.
 var TestCasesReset = []struct {
 	Name        string
 	Data        []int

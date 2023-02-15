@@ -2,6 +2,7 @@ package testdata
 
 import "github.com/prebox/cirbuf/errors"
 
+// Test cases for PeekFront.
 var TestCasesPeekFront = []struct {
 	Name   string
 	Data   []int
