@@ -5,6 +5,7 @@ import "testing"
 func TestEnqueue(t *testing.T) {
 	q := New[int](3)
 
+	// Setup test cases.
 	testCases := []struct {
 		name     string
 		item     int
@@ -20,6 +21,7 @@ func TestEnqueue(t *testing.T) {
 		{"enqueue full", 4, []int{1, 2, 3}, 3, 0, 0, ErrorIsFull},
 	}
 
+	// Run test cases.
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			err := q.Enqueue(tc.item)
@@ -52,6 +54,7 @@ func TestDequeue(t *testing.T) {
 	q.tail = 0
 	q.count = 3
 
+	// Setup test cases.
 	testCases := []struct {
 		name     string
 		expected int
@@ -66,6 +69,7 @@ func TestDequeue(t *testing.T) {
 		{"dequeue empty", 0, 0, 0, 0, ErrorIsEmpty},
 	}
 
+	// Run test cases.
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			item, err := q.Dequeue()
@@ -91,6 +95,7 @@ func TestDequeue(t *testing.T) {
 func TestGet(t *testing.T) {
 	q := New[int](3)
 
+	// Run test on empty queue.
 	t.Run("get empty", func(t *testing.T) {
 		if _, err := q.Get(0); err != ErrorIsEmpty {
 			t.Errorf("Expected %v, but got: %v", ErrorIsEmpty, err)
@@ -102,6 +107,7 @@ func TestGet(t *testing.T) {
 	q.tail = 0
 	q.count = 3
 
+	// Setup test cases.
 	testCases := []struct {
 		name     string
 		index    int
@@ -114,6 +120,7 @@ func TestGet(t *testing.T) {
 		{"get out of bounds", 3, 0, ErrorOutOfBounds},
 	}
 
+	// Run test cases.
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			item, err := q.Get(tc.index)
