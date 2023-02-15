@@ -10,7 +10,11 @@ type CircularBuffer[T any] struct {
 }
 
 // Creates a new static size circular buffer.
+// Size will default to one if size is less than one.
 func New[T any](size int) *CircularBuffer[T] {
+	if size < 1 {
+		size = 1
+	}
 	return &CircularBuffer[T]{
 		data:  make([]T, size),
 		head:  0,
