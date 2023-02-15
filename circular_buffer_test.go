@@ -40,30 +40,36 @@ func TestIsFull(t *testing.T) {
 func TestIsEmpty(t *testing.T) {
 	q := New[int](3)
 
-	// Check if IsEmpty returns true for an empty buffer.
-	if empty := q.IsEmpty(); empty != true {
-		t.Errorf("Expected true, but got: %v", empty)
-	}
+	t.Run("empty buffer", func(t *testing.T) {
+		// Check if IsEmpty returns true for an empty buffer.
+		if empty := q.IsEmpty(); empty != true {
+			t.Errorf("Expected true, but got: %v", empty)
+		}
+	})
 
-	// Manually set the state of the buffer to partially full.
-	// Check if IsEmpty returns false for a partially full buffer.
-	q.data = []int{1, 0, 0}
-	q.head = 0
-	q.tail = 1
-	q.count = 1
-	if empty := q.IsEmpty(); empty != false {
-		t.Errorf("Expected false, but got: %v", empty)
-	}
+	t.Run("partially full buffer", func(t *testing.T) {
+		// Manually set the state of the buffer to partially full.
+		q.data = []int{1, 0, 0}
+		q.head = 0
+		q.tail = 1
+		q.count = 1
+		// Check if IsEmpty returns false for a partially full buffer.
+		if empty := q.IsEmpty(); empty != false {
+			t.Errorf("Expected false, but got: %v", empty)
+		}
+	})
 
-	// Manually set the state of the buffer to full.
-	// Check if IsEmpty returns false for a full buffer.
-	q.data = []int{1, 2, 3}
-	q.head = 0
-	q.tail = 0
-	q.count = 3
-	if empty := q.IsEmpty(); empty != false {
-		t.Errorf("Expected false, but got: %v", empty)
-	}
+	t.Run("full buffer", func(t *testing.T) {
+		// Manually set the state of the buffer to full.
+		q.data = []int{1, 2, 3}
+		q.head = 0
+		q.tail = 0
+		q.count = 3
+		// Check if IsEmpty returns false for a full buffer.
+		if empty := q.IsEmpty(); empty != false {
+			t.Errorf("Expected false, but got: %v", empty)
+		}
+	})
 }
 
 func TestEnqueue(t *testing.T) {
