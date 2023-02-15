@@ -2,6 +2,35 @@ package cirbuf
 
 import "testing"
 
+func TestIsFull(t *testing.T) {
+	q := New[int](3)
+
+	// Check if IsFull returns false for an empty buffer.
+	if q.IsFull() != false {
+		t.Errorf("Expected false, but got: %v", q.IsFull())
+	}
+
+	// Manually set the state of the buffer to partially full.
+	// Check if IsFull returns false for a partially full buffer.
+	q.data = []int{1, 2, 0}
+	q.head = 0
+	q.tail = 2
+	q.count = 2
+	if q.IsFull() != false {
+		t.Errorf("Expected false, but got: %v", q.IsFull())
+	}
+
+	// Manually set the state of the buffer to full.
+	// Check if IsFull returns true for a full buffer.
+	q.data = []int{1, 2, 3}
+	q.head = 0
+	q.tail = 0
+	q.count = 3
+	if q.IsFull() != true {
+		t.Errorf("Expected true, but got: %v", q.IsFull())
+	}
+}
+
 func TestEnqueue(t *testing.T) {
 	q := New[int](3)
 
