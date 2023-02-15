@@ -178,3 +178,21 @@ func TestReset(t *testing.T) {
 		})
 	}
 }
+
+func TestCapacity(t *testing.T) {
+	for _, test := range testdata.TestCasesCapacity {
+		q := &CircularBuffer[int]{
+			data:  test.Data,
+			head:  0,
+			tail:  test.Count,
+			count: test.Count,
+		}
+
+		// Run test case.
+		t.Run(test.Name, func(t *testing.T) {
+			if got := q.Capacity(); got != test.Expect {
+				t.Errorf("Expected %v, but got: %v", test.Expect, got)
+			}
+		})
+	}
+}
