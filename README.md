@@ -1,4 +1,5 @@
 # Circular Buffer Package for Go
+![Go Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 [![Go Report Card](https://goreportcard.com/badge/github.com/prebox/cirbuf)](https://goreportcard.com/report/github.com/prebox/cirbuf)
 [![Go Reference](https://pkg.go.dev/badge/github.com/prebox/cirbuf.svg)](https://pkg.go.dev/github.com/prebox/cirbuf)
 
