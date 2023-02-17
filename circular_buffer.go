@@ -16,10 +16,8 @@ func New[T any](size int) *CircularBuffer[T] {
 		size = 1
 	}
 	return &CircularBuffer[T]{
-		data:  make([]T, size),
-		head:  0,
-		tail:  -1,
-		count: 0,
+		data: make([]T, size),
+		head: 0, tail: -1, count: 0,
 	}
 }
 
@@ -32,8 +30,9 @@ func (q *CircularBuffer[T]) Count() int {
 func (q *CircularBuffer[T]) Enqueue(item T) error {
 	if q.IsFull() {
 		return errors.ErrorIsFull
+	} else if q.tail += 1; q.tail == len(q.data) {
+		q.tail = 0
 	}
-	q.tail = (q.tail + 1) % len(q.data)
 	q.data[q.tail] = item
 	q.count++
 	return nil
@@ -45,7 +44,9 @@ func (q *CircularBuffer[T]) Dequeue() (T, error) {
 		return *new(T), errors.ErrorIsEmpty
 	}
 	item := q.data[q.head]
-	q.head = (q.head + 1) % len(q.data)
+	if q.head += 1; q.head == len(q.data) {
+		q.head = 0
+	}
 	q.count--
 	return item, nil
 }
@@ -56,9 +57,10 @@ func (q *CircularBuffer[T]) Get(index int) (T, error) {
 		return *new(T), errors.ErrorIsEmpty
 	} else if index < 0 || index >= q.count {
 		return *new(T), errors.ErrorOutOfBounds
+	} else if index += q.head; index >= len(q.data) {
+		index -= len(q.data)
 	}
-	internalIndex := (q.head + index) % len(q.data)
-	return q.data[internalIndex], nil
+	return q.data[index], nil
 }
 
 // Returns the item at the front of the circular buffer.
