@@ -46,39 +46,26 @@ import (
 )
 
 func main() {
-	buffer := cirbuf.New[int](10)
+	buffer := cirbuf.New[int](3)
 
-	buffer.Enqueue(1)
-	buffer.Enqueue(2)
-	buffer.Enqueue(3)
+	fmt.Println(buffer.Enqueue(1))		// Output: nil
+	fmt.Println(buffer.Enqueue(2))		// Output: nil
+	fmt.Println(buffer.Enqueue(3))		// Output: nil
+	fmt.Println(buffer.Enqueue(4))		// Output: "queue is full"
 
-	fmt.Println(buffer.PeekFront())
-	// Output: (1, nil)
+	fmt.Println(buffer.PeekFront())		// Output: (1, nil)
+	fmt.Println(buffer.PeekBack())		// Output: (3, nil)
 
-	fmt.Println(buffer.PeekBack())
-	// Output: (3, nil)
+	fmt.Println(buffer.Dequeue())		// Output: (1, nil)
+	fmt.Println(buffer.Get(0))		// Output: (2, nil)
 
-	fmt.Println(buffer.Dequeue())
-	// Output: (1, nil)
+	fmt.Println(buffer.IsEmpty())		// Output: false
+	fmt.Println(buffer.IsFull())		// Output: false
 
-	fmt.Println(buffer.Get(0))
-	// Output: (2, nil)
-
-	fmt.Println(buffer.IsEmpty())
-	// Output: false
-
-	fmt.Println(buffer.IsFull())
-	// Output: false
-
-	fmt.Println(buffer.Count())
-	// Output: 2
-
+	fmt.Println(buffer.Count())		// Output: 2
 	buffer.Reset()
+	fmt.Println(buffer.Count())		// Output: 0
 
-	fmt.Println(buffer.Count())
-	// Output: 0
-
-	fmt.Println(buffer.Capacity())
-	// Output: 10
+	fmt.Println(buffer.Capacity())		// Output: 3
 }
 ```
