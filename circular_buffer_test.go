@@ -217,12 +217,17 @@ func TestCount(t *testing.T) {
 
 func TestNew(t *testing.T) {
 	for _, test := range testdata.TestCasesNew {
-		q := New[int](test.Capacity)
+		q, err := New[int](test.Capacity)
 
 		// Run test case.
 		t.Run(test.Name, func(t *testing.T) {
-			if got := len(q.data); got != test.Expect {
-				t.Errorf("Expected %v, but got: %v", test.Expect, got)
+			if err != test.Err {
+				t.Errorf("Expected %v, but got: %v", test.Err, err)
+			}
+			if err == nil {
+				if got := len(q.data); got != test.Expect {
+					t.Errorf("Expected %v, but got: %v", test.Expect, got)
+				}
 			}
 		})
 	}

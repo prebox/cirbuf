@@ -18,9 +18,9 @@ Once you have the package installed, you can start using it by importing it in y
 import "github.com/prebox/cirbuf"
 ```
 ## Initializing a Circular Buffer
-To create a new circular buffer, you can use the `New` function, followed by the type of data you want to store in square brackets. The function argument is the circular buffer's capacity.
+To create a new circular buffer, you can use the `New` function, followed by the type of data you want to store in square brackets. The function argument is the circular buffer's capacity. The `New` function will return an error if the capacity is invalid.
 ```go
-buffer := cirbuf.New[int](10)
+buffer, err := cirbuf.New[int](10)
 ```
 ## Available Methods
 Here is a list of methods available for the circular buffer:
@@ -46,7 +46,11 @@ import (
 )
 
 func main() {
-	buffer := cirbuf.New[int](3)
+	buffer, err := cirbuf.New[int](3)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	fmt.Println(buffer.Enqueue(1))		// Output: nil
 	fmt.Println(buffer.Enqueue(2))		// Output: nil

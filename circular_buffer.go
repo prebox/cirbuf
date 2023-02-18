@@ -10,15 +10,14 @@ type CircularBuffer[T any] struct {
 }
 
 // Creates a new static size circular buffer.
-// Size will default to one if size is less than one.
-func New[T any](size int) *CircularBuffer[T] {
+func New[T any](size int) (*CircularBuffer[T], error) {
 	if size < 1 {
-		size = 1
+		return nil, errors.ErrorInvalidCapacity
 	}
 	return &CircularBuffer[T]{
 		data: make([]T, size),
 		head: 0, tail: -1, count: 0,
-	}
+	}, nil
 }
 
 // Returns the number of items in the circular buffer.
