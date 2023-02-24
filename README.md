@@ -1,12 +1,12 @@
-# Circular Buffer Package for Go
+# Circular Buffer
 ![Go Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 [![Go Report Card](https://goreportcard.com/badge/github.com/prebox/cirbuf)](https://goreportcard.com/report/github.com/prebox/cirbuf)
 [![Go Reference](https://pkg.go.dev/badge/github.com/prebox/cirbuf.svg)](https://pkg.go.dev/github.com/prebox/cirbuf)
 
-The cirbuf package is a generic static circular buffer.
+The cirbuf package is a robust generic static circular buffer.
 ## Features
+* Extensive tests providing 100% test coverage.
 * Supports any single data type through the use of generics.
-* Efficient error handling for a variety of different exceptions.
 * Provides O(1) time complexity for all of the circular buffer methods.
 ## Getting Started
 To start using cirbuf, you need to install it by running the following command:
@@ -60,15 +60,15 @@ func main() {
 	fmt.Println(buffer.PeekFront())		// Output: (1, nil)
 	fmt.Println(buffer.PeekBack())		// Output: (3, nil)
 
-	fmt.Println(buffer.Dequeue())		// Output: (1, nil)
-	fmt.Println(buffer.Get(0))		// Output: (2, nil)
+	fmt.Println(buffer.Dequeue())	  	// Output: (1, nil)
+	fmt.Println(buffer.Get(0))  	  	// Output: (2, nil)
 
-	fmt.Println(buffer.IsEmpty())		// Output: false
-	fmt.Println(buffer.IsFull())		// Output: false
+	fmt.Println(buffer.IsEmpty())	  	// Output: false
+	fmt.Println(buffer.IsFull())	  	// Output: false
 
-	fmt.Println(buffer.Count())		// Output: 2
+	fmt.Println(buffer.Count())	    	// Output: 2
 	buffer.Reset()
-	fmt.Println(buffer.Count())		// Output: 0
+	fmt.Println(buffer.Count())	    	// Output: 0
 
 	fmt.Println(buffer.Capacity())		// Output: 3
 }
